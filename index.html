@@ -30,28 +30,29 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem 1rem 3rem;
+    padding: 1.2rem 1rem 3rem;
   }
 
-  header { text-align: center; margin-bottom: 2rem; }
-  header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.3rem; }
-  header h1 span.flag { font-size: 1.4rem; }
-  header p { font-size: 0.82rem; color: var(--text-dim); }
+  header { text-align: center; margin-bottom: 1.4rem; }
+  header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.25rem; }
+  header h1 span.flag { font-size: 1.3rem; }
+  header p { font-size: 0.8rem; color: var(--text-dim); }
 
-  .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 1.2rem; }
+  .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 0.9rem; }
 
+  /* 金額輸入 */
   .input-group {
     background: var(--card);
     border: 1px solid var(--card-border);
     border-radius: 14px;
-    padding: 1.2rem;
+    padding: 1rem 1.1rem;
   }
 
   .input-group label {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     color: var(--text-dim);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -59,14 +60,14 @@
 
   .input-row { display: flex; align-items: center; gap: 0.6rem; }
 
-  .input-row .currency-tag {
+  .currency-tag {
     font-family: 'DM Mono', monospace;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-dim);
     background: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 8px;
-    padding: 0.6rem 0.7rem;
+    padding: 0.6rem 0.65rem;
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -74,12 +75,12 @@
   input[type="number"] {
     width: 100%;
     font-family: 'DM Mono', monospace;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--text);
     background: var(--input-bg);
     border: 1.5px solid var(--input-border);
     border-radius: 10px;
-    padding: 0.65rem 0.8rem;
+    padding: 0.6rem 0.8rem;
     outline: none;
     transition: border-color 0.2s;
     -moz-appearance: textfield;
@@ -89,151 +90,106 @@
   input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   input:focus { border-color: var(--input-focus); }
 
-  /* Rate display */
-  .rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  /* 匯率 + 結果 合併格子 */
+  .rr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 
-  .rate-box {
+  .rr-box {
     background: var(--card);
     border: 1px solid var(--card-border);
-    border-radius: 10px;
-    padding: 0.55rem 0.8rem;
+    border-radius: 12px;
+    padding: 0.8rem 0.9rem;
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
+    flex-direction: column;
+    gap: 0.35rem;
   }
 
-  .rate-box.card-rate { border-left: 3px solid var(--accent-card); }
-  .rate-box.cash-rate { border-left: 3px solid var(--accent-cash); }
+  .rr-box.card-side { border-left: 3px solid var(--accent-card); }
+  .rr-box.cash-side { border-left: 3px solid var(--accent-cash); }
 
-  .rate-box label {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    font-weight: 600;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
+  .rr-label { font-size: 0.68rem; font-weight: 600; color: var(--text-dim); }
 
-  .rate-right { display: flex; flex-direction: column; }
-  .rate-value { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; color: var(--text); }
-  .rate-date { font-size: 0.58rem; color: var(--text-dim); margin-top: 0.1rem; opacity: 0.7; }
-
-  /* Results */
-  .results { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.4rem; }
-
-  .result-card {
-    border-radius: 14px;
-    padding: 1.2rem 1rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .result-card.card-result { background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.25); }
-  .result-card.cash-result { background: rgba(46,204,113,0.08); border: 1px solid rgba(46,204,113,0.25); }
-
-  .result-label {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-  }
-
-  .card-result .result-label { color: var(--accent-card); }
-  .cash-result .result-label { color: var(--accent-cash); }
-
-  .result-value {
+  .rr-rate {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    opacity: 0.8;
+  }
+
+  .rr-divider { height: 1px; background: var(--card-border); margin: 0.15rem 0; }
+
+  .rr-result {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.15;
     transition: transform 0.15s ease;
   }
 
-  .result-value.pop { transform: scale(1.06); }
-  .result-unit { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.3rem; }
+  .rr-result.pop { transform: scale(1.06); }
+  .card-side .rr-result { color: var(--accent-card); }
+  .cash-side .rr-result { color: var(--accent-cash); }
 
-  .diff-note { text-align: center; font-size: 0.78rem; color: var(--text-dim); margin-top: 0.3rem; min-height: 1.4em; }
+  .rr-unit { font-size: 0.62rem; color: var(--text-dim); }
+
+  .diff-note {
+    text-align: center;
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    min-height: 1.2em;
+  }
   .diff-note span { color: var(--accent-cash); font-weight: 600; }
 
-  /* Preset buttons */
-  .presets { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.7rem; }
-
-  .presets button {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    padding: 0.4rem 0.7rem;
-    border-radius: 8px;
-    border: 1px solid var(--card-border);
-    background: var(--card);
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .presets button:hover, .presets button:active {
-    background: var(--input-focus);
-    color: #fff;
-    border-color: var(--input-focus);
-  }
-
-  /* Action buttons */
-  .action-row { display: flex; gap: 0.7rem; }
+  /* 操作按鈕 */
+  .action-row { display: flex; gap: 0.6rem; }
 
   .btn {
     flex: 1;
     font-family: 'Noto Sans TC', sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
-    padding: 0.75rem;
+    padding: 0.7rem;
     border-radius: 10px;
     border: none;
     cursor: pointer;
     transition: all 0.15s;
   }
 
-  .btn-add {
-    background: var(--accent-blue);
-    color: #fff;
-  }
-
-  .btn-add:hover, .btn-add:active { background: #2980b9; }
+  .btn-add { background: var(--accent-blue); color: #fff; }
+  .btn-add:active { background: #2980b9; }
 
   .btn-reset {
     background: var(--card);
     border: 1px solid var(--card-border);
     color: var(--text-dim);
   }
+  .btn-reset:active { background: rgba(231,76,60,0.15); color: var(--accent-card); border-color: var(--accent-card); }
 
-  .btn-reset:hover, .btn-reset:active { background: rgba(231,76,60,0.15); color: var(--accent-card); border-color: var(--accent-card); }
-
-  /* Summary */
+  /* 加總統計 */
   .summary-box {
     background: var(--card);
     border: 1px solid var(--card-border);
     border-radius: 14px;
-    padding: 1.1rem 1.2rem;
+    padding: 1rem 1.1rem;
   }
 
   .summary-title {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-dim);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.75rem;
   }
 
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
   .summary-item { text-align: center; }
-
-  .summary-label { font-size: 0.68rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+  .summary-label { font-size: 0.66rem; color: var(--text-dim); margin-bottom: 0.2rem; }
 
   .summary-value {
     font-family: 'DM Mono', monospace;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
+    transition: transform 0.15s;
   }
 
   .summary-value.card-color { color: var(--accent-card); }
@@ -241,14 +197,14 @@
 
   .summary-count {
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--text-dim);
     margin-top: 0.6rem;
     padding-top: 0.6rem;
     border-top: 1px solid var(--card-border);
   }
 
-  /* History */
+  /* 歷史紀錄 */
   .history-box {
     background: var(--card);
     border: 1px solid var(--card-border);
@@ -260,12 +216,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.9rem 1.2rem;
+    padding: 0.8rem 1.1rem;
     border-bottom: 1px solid var(--card-border);
   }
 
   .history-title {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-dim);
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -273,121 +229,52 @@
   }
 
   .btn-clear-history {
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     color: var(--text-dim);
     background: none;
     border: none;
     cursor: pointer;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
-    transition: color 0.15s;
   }
+  .btn-clear-history:active { color: var(--accent-card); }
 
-  .btn-clear-history:hover { color: var(--accent-card); }
-
-  .history-list { max-height: 260px; overflow-y: auto; }
+  .history-list { max-height: 240px; overflow-y: auto; }
 
   .history-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1.2rem;
+    padding: 0.65rem 1.1rem;
     border-bottom: 1px solid rgba(42,63,85,0.5);
-    transition: background 0.1s;
     gap: 0.5rem;
   }
 
   .history-item:last-child { border-bottom: none; }
-  .history-item:hover { background: rgba(52,152,219,0.05); }
 
   .history-krw {
     font-family: 'DM Mono', monospace;
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     color: var(--text-dim);
     flex-shrink: 0;
   }
 
-  .history-twd {
-    display: flex;
-    gap: 0.6rem;
-    flex: 1;
-    justify-content: flex-end;
-  }
+  .history-twd { display: flex; gap: 0.5rem; flex: 1; justify-content: flex-end; }
 
-  .history-card-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--accent-card);
-  }
+  .history-card-val { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--accent-card); }
+  .history-cash-val { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--accent-cash); }
 
-  .history-cash-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--accent-cash);
-  }
-
-  .history-time {
-    font-size: 0.62rem;
-    color: var(--text-dim);
-    opacity: 0.6;
-    flex-shrink: 0;
-  }
+  .history-time { font-size: 0.6rem; color: var(--text-dim); opacity: 0.6; flex-shrink: 0; }
 
   .history-empty {
-    padding: 1.5rem;
+    padding: 1.4rem;
     text-align: center;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     color: var(--text-dim);
     opacity: 0.5;
   }
 
-  /* Sticky result bar */
-  .sticky-results {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #111e2b;
-    border-top: 1px solid var(--card-border);
-    padding: 0.7rem 1rem;
-    display: flex;
-    gap: 0.6rem;
-    align-items: stretch;
-    z-index: 100;
-  }
-
-  .sticky-result-item {
-    flex: 1;
-    border-radius: 10px;
-    padding: 0.5rem 0.7rem;
-    text-align: center;
-  }
-
-  .sticky-result-item.card-result {
-    background: rgba(231,76,60,0.1);
-    border: 1px solid rgba(231,76,60,0.3);
-  }
-
-  .sticky-result-item.cash-result {
-    background: rgba(46,204,113,0.1);
-    border: 1px solid rgba(46,204,113,0.3);
-  }
-
-  .sticky-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
-  .card-result .sticky-label { color: var(--accent-card); }
-  .cash-result .sticky-label { color: var(--accent-cash); }
-
-  .sticky-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 1.15rem;
-    font-weight: 600;
-    transition: transform 0.15s ease;
-  }
-
-  .sticky-value.pop { transform: scale(1.08); }
-
-  /* pad body bottom so content isn't hidden behind sticky bar */
-  body { padding-bottom: 6rem; }
+  footer { margin-top: 2rem; font-size: 0.68rem; color: var(--text-dim); text-align: center; opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -406,24 +293,23 @@
       <span class="currency-tag">₩ KRW</span>
       <input type="number" id="krwAmount" placeholder="例: 15000" inputmode="numeric">
     </div>
-
   </div>
 
-  <!-- 匯率顯示（鎖定） -->
-  <div class="rate-grid">
-    <div class="rate-box card-rate">
-      <label>💳 刷卡</label>
-      <div class="rate-right">
-        <div class="rate-value">0.02070</div>
-        <div class="rate-date">國際匯率 · 05/23</div>
-      </div>
+  <!-- 匯率 + 結果 合併 -->
+  <div class="rr-grid">
+    <div class="rr-box card-side">
+      <div class="rr-label">💳 刷卡</div>
+      <div class="rr-rate">× 0.02070</div>
+      <div class="rr-divider"></div>
+      <div class="rr-result" id="cardResult">—</div>
+      <div class="rr-unit">新台幣 TWD</div>
     </div>
-    <div class="rate-box cash-rate">
-      <label>💵 現金</label>
-      <div class="rate-right">
-        <div class="rate-value">0.02310</div>
-        <div class="rate-date">固定匯率</div>
-      </div>
+    <div class="rr-box cash-side">
+      <div class="rr-label">💵 現金</div>
+      <div class="rr-rate">× 0.02310</div>
+      <div class="rr-divider"></div>
+      <div class="rr-result" id="cashResult">—</div>
+      <div class="rr-unit">新台幣 TWD</div>
     </div>
   </div>
 
@@ -466,41 +352,22 @@
 
 <footer>KRW → TWD 換算工具 · 匯率僅供參考</footer>
 
-<!-- 固定底部結果列 -->
-<div class="sticky-results">
-  <div class="sticky-result-item card-result">
-    <div class="sticky-label">💳 刷卡價</div>
-    <div class="sticky-value" id="cardResult">—</div>
-  </div>
-  <div class="sticky-result-item cash-result">
-    <div class="sticky-label">💵 現金價</div>
-    <div class="sticky-value" id="cashResult">—</div>
-  </div>
-</div>
-
 <script>
-const krwInput = document.getElementById('krwAmount');
+const krwInput    = document.getElementById('krwAmount');
 const cardResultEl = document.getElementById('cardResult');
 const cashResultEl = document.getElementById('cashResult');
-const diffNote = document.getElementById('diffNote');
+const diffNote    = document.getElementById('diffNote');
 const totalCardEl = document.getElementById('totalCard');
 const totalCashEl = document.getElementById('totalCash');
 const summaryCountEl = document.getElementById('summaryCount');
-const historyListEl = document.getElementById('historyList');
+const historyListEl  = document.getElementById('historyList');
 
 const CARD_RATE = 0.02070;
-const CASH_RATE = 0.0231;
+const CASH_RATE = 0.02310;
 
-let history = [];
-let totalCard = 0;
-let totalCash = 0;
-let currentCard = 0;
-let currentCash = 0;
-
-function setAmount(val) {
-  krwInput.value = val;
-  calculate();
-}
+let historyLog = [];
+let totalCard = 0, totalCash = 0;
+let currentCard = 0, currentCash = 0;
 
 function popAnim(el) {
   el.classList.remove('pop');
@@ -510,11 +377,7 @@ function popAnim(el) {
 }
 
 function fmt(num) {
-  if (isNaN(num) || num === 0) return '—';
-  return num.toLocaleString('zh-TW', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
-}
-
-function fmtFull(num) {
+  if (!num) return '—';
   return num.toLocaleString('zh-TW', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 }
 
@@ -523,15 +386,13 @@ function calculate() {
   currentCard = krw * CARD_RATE;
   currentCash = krw * CASH_RATE;
 
-  cardResultEl.textContent = krw ? `NT$${fmt(currentCard)}` : '—';
-  cashResultEl.textContent = krw ? `NT$${fmt(currentCash)}` : '—';
+  cardResultEl.textContent = krw ? fmt(currentCard) : '—';
+  cashResultEl.textContent = krw ? fmt(currentCash) : '—';
 
   if (krw) {
     const diff = Math.abs(currentCard - currentCash);
-    const cheaper = currentCard < currentCash ? '刷卡' : currentCard > currentCash ? '現金' : null;
-    diffNote.innerHTML = cheaper
-      ? `${cheaper}較便宜，省 <span>NT$ ${fmt(diff)}</span>`
-      : '兩者價格相同';
+    const cheaper = currentCard < currentCash ? '刷卡' : '現金';
+    diffNote.innerHTML = `${cheaper}較便宜，省 <span>NT$ ${fmt(diff)}</span>`;
   } else {
     diffNote.innerHTML = '';
   }
@@ -549,39 +410,34 @@ function addToTotal() {
 
   const now = new Date();
   const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-
-  history.unshift({ krw, card: currentCard, cash: currentCash, time: timeStr });
+  historyLog.unshift({ krw, card: currentCard, cash: currentCash, time: timeStr });
 
   updateSummary();
   renderHistory();
 
-  // flash the summary
   totalCardEl.style.transform = 'scale(1.08)';
   totalCashEl.style.transform = 'scale(1.08)';
-  setTimeout(() => {
-    totalCardEl.style.transform = '';
-    totalCashEl.style.transform = '';
-  }, 200);
+  setTimeout(() => { totalCardEl.style.transform = ''; totalCashEl.style.transform = ''; }, 200);
 }
 
 function updateSummary() {
-  totalCardEl.textContent = `NT$ ${fmtFull(totalCard)}`;
-  totalCashEl.textContent = `NT$ ${fmtFull(totalCash)}`;
-  summaryCountEl.textContent = `共 ${history.length} 筆 · 合計 ₩${fmtFull(history.reduce((a,b)=>a+b.krw,0))}`;
+  totalCardEl.textContent = `NT$ ${fmt(totalCard)}`;
+  totalCashEl.textContent = `NT$ ${fmt(totalCash)}`;
+  const krwSum = historyLog.reduce((a, b) => a + b.krw, 0);
+  summaryCountEl.textContent = `共 ${historyLog.length} 筆 · 合計 ₩${fmt(krwSum)}`;
 }
 
 function renderHistory() {
-  if (history.length === 0) {
+  if (!historyLog.length) {
     historyListEl.innerHTML = '<div class="history-empty">尚無紀錄</div>';
     return;
   }
-
-  historyListEl.innerHTML = history.map((h, i) => `
+  historyListEl.innerHTML = historyLog.map(h => `
     <div class="history-item">
-      <span class="history-krw">₩${fmtFull(h.krw)}</span>
+      <span class="history-krw">₩${fmt(h.krw)}</span>
       <div class="history-twd">
-        <span class="history-card-val">💳 ${fmtFull(h.card)}</span>
-        <span class="history-cash-val">💵 ${fmtFull(h.cash)}</span>
+        <span class="history-card-val">💳 ${fmt(h.card)}</span>
+        <span class="history-cash-val">💵 ${fmt(h.cash)}</span>
       </div>
       <span class="history-time">${h.time}</span>
     </div>
@@ -589,29 +445,21 @@ function renderHistory() {
 }
 
 function clearHistory() {
-  if (history.length === 0) return;
-  history = [];
-  totalCard = 0;
-  totalCash = 0;
-  updateSummary();
-  renderHistory();
-  summaryCountEl.textContent = '尚未加入任何項目';
-}
-
-function resetAll() {
-  krwInput.value = '';
-  currentCard = 0;
-  currentCash = 0;
-  cardResultEl.textContent = '—';
-  cashResultEl.textContent = '—';
-  diffNote.innerHTML = '';
-  history = [];
-  totalCard = 0;
-  totalCash = 0;
+  historyLog = [];
+  totalCard = 0; totalCash = 0;
   totalCardEl.textContent = 'NT$ 0';
   totalCashEl.textContent = 'NT$ 0';
   summaryCountEl.textContent = '尚未加入任何項目';
   renderHistory();
+}
+
+function resetAll() {
+  krwInput.value = '';
+  currentCard = 0; currentCash = 0;
+  cardResultEl.textContent = '—';
+  cashResultEl.textContent = '—';
+  diffNote.innerHTML = '';
+  clearHistory();
 }
 
 krwInput.addEventListener('input', calculate);
