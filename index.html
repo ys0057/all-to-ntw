@@ -14,6 +14,7 @@
     --card-border: #2a3f55;
     --accent-card: #e74c3c;
     --accent-cash: #2ecc71;
+    --accent-blue: #3498db;
     --text: #e8edf2;
     --text-dim: #7f95a8;
     --input-bg: #0d1520;
@@ -32,34 +33,13 @@
     padding: 1.5rem 1rem 3rem;
   }
 
-  header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  header h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    margin-bottom: 0.3rem;
-  }
-
+  header { text-align: center; margin-bottom: 2rem; }
+  header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.3rem; }
   header h1 span.flag { font-size: 1.4rem; }
+  header p { font-size: 0.82rem; color: var(--text-dim); }
 
-  header p {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-  }
+  .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 1.2rem; }
 
-  .container {
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-
-  /* Input sections */
   .input-group {
     background: var(--card);
     border: 1px solid var(--card-border);
@@ -77,11 +57,7 @@
     text-transform: uppercase;
   }
 
-  .input-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
+  .input-row { display: flex; align-items: center; gap: 0.6rem; }
 
   .input-row .currency-tag {
     font-family: 'DM Mono', monospace;
@@ -95,7 +71,7 @@
     flex-shrink: 0;
   }
 
-  input[type="number"], input[type="text"] {
+  input[type="number"] {
     width: 100%;
     font-family: 'DM Mono', monospace;
     font-size: 1.15rem;
@@ -111,15 +87,10 @@
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
   input:focus { border-color: var(--input-focus); }
 
-  /* Rate info display */
-  .rate-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem;
-  }
+  /* Rate display */
+  .rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
 
   .rate-box {
     background: var(--card);
@@ -141,26 +112,11 @@
   .rate-box.card-rate { border-left: 3px solid var(--accent-card); }
   .rate-box.cash-rate { border-left: 3px solid var(--accent-cash); }
 
-  .rate-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .rate-date {
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    margin-top: 0.25rem;
-  }
+  .rate-value { font-family: 'DM Mono', monospace; font-size: 1.1rem; font-weight: 500; color: var(--text); }
+  .rate-date { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.25rem; }
 
   /* Results */
-  .results {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem;
-    margin-top: 0.4rem;
-  }
+  .results { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.4rem; }
 
   .result-card {
     border-radius: 14px;
@@ -170,23 +126,8 @@
     overflow: hidden;
   }
 
-  .result-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 14px;
-    opacity: 0.12;
-  }
-
-  .result-card.card-result {
-    background: rgba(231, 76, 60, 0.08);
-    border: 1px solid rgba(231, 76, 60, 0.25);
-  }
-
-  .result-card.cash-result {
-    background: rgba(46, 204, 113, 0.08);
-    border: 1px solid rgba(46, 204, 113, 0.25);
-  }
+  .result-card.card-result { background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.25); }
+  .result-card.cash-result { background: rgba(46,204,113,0.08); border: 1px solid rgba(46,204,113,0.25); }
 
   .result-label {
     font-size: 0.72rem;
@@ -207,33 +148,14 @@
     transition: transform 0.15s ease;
   }
 
-  .result-value.pop {
-    transform: scale(1.06);
-  }
+  .result-value.pop { transform: scale(1.06); }
+  .result-unit { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.3rem; }
 
-  .result-unit {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    margin-top: 0.3rem;
-  }
-
-  .diff-note {
-    text-align: center;
-    font-size: 0.78rem;
-    color: var(--text-dim);
-    margin-top: 0.3rem;
-    min-height: 1.4em;
-  }
-
+  .diff-note { text-align: center; font-size: 0.78rem; color: var(--text-dim); margin-top: 0.3rem; min-height: 1.4em; }
   .diff-note span { color: var(--accent-cash); font-weight: 600; }
 
   /* Preset buttons */
-  .presets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-top: 0.2rem;
-  }
+  .presets { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.7rem; }
 
   .presets button {
     font-family: 'DM Mono', monospace;
@@ -253,13 +175,171 @@
     border-color: var(--input-focus);
   }
 
-  footer {
-    margin-top: 2.5rem;
+  /* Action buttons */
+  .action-row { display: flex; gap: 0.7rem; }
+
+  .btn {
+    flex: 1;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-add {
+    background: var(--accent-blue);
+    color: #fff;
+  }
+
+  .btn-add:hover, .btn-add:active { background: #2980b9; }
+
+  .btn-reset {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    color: var(--text-dim);
+  }
+
+  .btn-reset:hover, .btn-reset:active { background: rgba(231,76,60,0.15); color: var(--accent-card); border-color: var(--accent-card); }
+
+  /* Summary */
+  .summary-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+  }
+
+  .summary-title {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+
+  .summary-item { text-align: center; }
+
+  .summary-label { font-size: 0.68rem; color: var(--text-dim); margin-bottom: 0.25rem; }
+
+  .summary-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .summary-value.card-color { color: var(--accent-card); }
+  .summary-value.cash-color { color: var(--accent-cash); }
+
+  .summary-count {
+    text-align: center;
     font-size: 0.7rem;
     color: var(--text-dim);
-    text-align: center;
-    opacity: 0.6;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--card-border);
   }
+
+  /* History */
+  .history-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .history-title {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .btn-clear-history {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+
+  .btn-clear-history:hover { color: var(--accent-card); }
+
+  .history-list { max-height: 260px; overflow-y: auto; }
+
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid rgba(42,63,85,0.5);
+    transition: background 0.1s;
+    gap: 0.5rem;
+  }
+
+  .history-item:last-child { border-bottom: none; }
+  .history-item:hover { background: rgba(52,152,219,0.05); }
+
+  .history-krw {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .history-twd {
+    display: flex;
+    gap: 0.6rem;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .history-card-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--accent-card);
+  }
+
+  .history-cash-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--accent-cash);
+  }
+
+  .history-time {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .history-empty {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  footer { margin-top: 2.5rem; font-size: 0.7rem; color: var(--text-dim); text-align: center; opacity: 0.6; }
 </style>
 </head>
 <body>
@@ -278,7 +358,7 @@
       <span class="currency-tag">₩ KRW</span>
       <input type="number" id="krwAmount" placeholder="例: 15000" inputmode="numeric">
     </div>
-    <div class="presets" style="margin-top:0.7rem">
+    <div class="presets">
       <button onclick="setAmount(1000)">₩1,000</button>
       <button onclick="setAmount(5000)">₩5,000</button>
       <button onclick="setAmount(10000)">₩10,000</button>
@@ -317,18 +397,61 @@
 
   <div class="diff-note" id="diffNote"></div>
 
+  <!-- 操作按鈕 -->
+  <div class="action-row">
+    <button class="btn btn-add" onclick="addToTotal()">＋ 加入統計</button>
+    <button class="btn btn-reset" onclick="resetAll()">🔄 重製全部</button>
+  </div>
+
+  <!-- 加總統計 -->
+  <div class="summary-box">
+    <div class="summary-title">📊 加總統計</div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="summary-label">💳 刷卡總計</div>
+        <div class="summary-value card-color" id="totalCard">NT$ 0</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">💵 現金總計</div>
+        <div class="summary-value cash-color" id="totalCash">NT$ 0</div>
+      </div>
+    </div>
+    <div class="summary-count" id="summaryCount">尚未加入任何項目</div>
+  </div>
+
+  <!-- 歷史紀錄 -->
+  <div class="history-box">
+    <div class="history-header">
+      <span class="history-title">🕘 歷史紀錄</span>
+      <button class="btn-clear-history" onclick="clearHistory()">清除紀錄</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">尚無紀錄</div>
+    </div>
+  </div>
+
 </div>
 
 <footer>KRW → TWD 換算工具 · 匯率僅供參考</footer>
 
 <script>
 const krwInput = document.getElementById('krwAmount');
-const cardResult = document.getElementById('cardResult');
-const cashResult = document.getElementById('cashResult');
+const cardResultEl = document.getElementById('cardResult');
+const cashResultEl = document.getElementById('cashResult');
 const diffNote = document.getElementById('diffNote');
+const totalCardEl = document.getElementById('totalCard');
+const totalCashEl = document.getElementById('totalCash');
+const summaryCountEl = document.getElementById('summaryCount');
+const historyListEl = document.getElementById('historyList');
 
-const CARD_RATE = 0.02070;  // 國際匯率 2026/05/23（1 TWD = ₩48.3）
-const CASH_RATE = 0.0231;   // 固定現金匯率
+const CARD_RATE = 0.02070;
+const CASH_RATE = 0.0231;
+
+let history = [];
+let totalCard = 0;
+let totalCash = 0;
+let currentCard = 0;
+let currentCash = 0;
 
 function setAmount(val) {
   krwInput.value = val;
@@ -342,32 +465,109 @@ function popAnim(el) {
   setTimeout(() => el.classList.remove('pop'), 180);
 }
 
-function formatTWD(num) {
+function fmt(num) {
   if (isNaN(num) || num === 0) return '—';
+  return num.toLocaleString('zh-TW', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+}
+
+function fmtFull(num) {
   return num.toLocaleString('zh-TW', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 }
 
 function calculate() {
   const krw = parseFloat(krwInput.value) || 0;
+  currentCard = krw * CARD_RATE;
+  currentCash = krw * CASH_RATE;
 
-  const cardTWD = krw * CARD_RATE;
-  const cashTWD = krw * CASH_RATE;
-
-  cardResult.textContent = krw ? `NT$ ${formatTWD(cardTWD)}` : '—';
-  cashResult.textContent = krw ? `NT$ ${formatTWD(cashTWD)}` : '—';
+  cardResultEl.textContent = krw ? `NT$ ${fmt(currentCard)}` : '—';
+  cashResultEl.textContent = krw ? `NT$ ${fmt(currentCash)}` : '—';
 
   if (krw) {
-    const diff = Math.abs(cardTWD - cashTWD);
-    const cheaper = cardTWD < cashTWD ? '刷卡' : cardTWD > cashTWD ? '現金' : null;
+    const diff = Math.abs(currentCard - currentCash);
+    const cheaper = currentCard < currentCash ? '刷卡' : currentCard > currentCash ? '現金' : null;
     diffNote.innerHTML = cheaper
-      ? `${cheaper}較便宜，省 <span>NT$ ${formatTWD(diff)}</span>`
+      ? `${cheaper}較便宜，省 <span>NT$ ${fmt(diff)}</span>`
       : '兩者價格相同';
   } else {
     diffNote.innerHTML = '';
   }
 
-  popAnim(cardResult);
-  popAnim(cashResult);
+  popAnim(cardResultEl);
+  popAnim(cashResultEl);
+}
+
+function addToTotal() {
+  const krw = parseFloat(krwInput.value) || 0;
+  if (!krw) return;
+
+  totalCard += currentCard;
+  totalCash += currentCash;
+
+  const now = new Date();
+  const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+  history.unshift({ krw, card: currentCard, cash: currentCash, time: timeStr });
+
+  updateSummary();
+  renderHistory();
+
+  // flash the summary
+  totalCardEl.style.transform = 'scale(1.08)';
+  totalCashEl.style.transform = 'scale(1.08)';
+  setTimeout(() => {
+    totalCardEl.style.transform = '';
+    totalCashEl.style.transform = '';
+  }, 200);
+}
+
+function updateSummary() {
+  totalCardEl.textContent = `NT$ ${fmtFull(totalCard)}`;
+  totalCashEl.textContent = `NT$ ${fmtFull(totalCash)}`;
+  summaryCountEl.textContent = `共 ${history.length} 筆 · 合計 ₩${fmtFull(history.reduce((a,b)=>a+b.krw,0))}`;
+}
+
+function renderHistory() {
+  if (history.length === 0) {
+    historyListEl.innerHTML = '<div class="history-empty">尚無紀錄</div>';
+    return;
+  }
+
+  historyListEl.innerHTML = history.map((h, i) => `
+    <div class="history-item">
+      <span class="history-krw">₩${fmtFull(h.krw)}</span>
+      <div class="history-twd">
+        <span class="history-card-val">💳 ${fmtFull(h.card)}</span>
+        <span class="history-cash-val">💵 ${fmtFull(h.cash)}</span>
+      </div>
+      <span class="history-time">${h.time}</span>
+    </div>
+  `).join('');
+}
+
+function clearHistory() {
+  if (history.length === 0) return;
+  history = [];
+  totalCard = 0;
+  totalCash = 0;
+  updateSummary();
+  renderHistory();
+  summaryCountEl.textContent = '尚未加入任何項目';
+}
+
+function resetAll() {
+  krwInput.value = '';
+  currentCard = 0;
+  currentCash = 0;
+  cardResultEl.textContent = '—';
+  cashResultEl.textContent = '—';
+  diffNote.innerHTML = '';
+  history = [];
+  totalCard = 0;
+  totalCash = 0;
+  totalCardEl.textContent = 'NT$ 0';
+  totalCashEl.textContent = 'NT$ 0';
+  summaryCountEl.textContent = '尚未加入任何項目';
+  renderHistory();
 }
 
 krwInput.addEventListener('input', calculate);
