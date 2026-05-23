@@ -90,30 +90,32 @@
   input:focus { border-color: var(--input-focus); }
 
   /* Rate display */
-  .rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 
   .rate-box {
     background: var(--card);
     border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  .rate-box label {
-    display: block;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
+    border-radius: 10px;
+    padding: 0.55rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
 
   .rate-box.card-rate { border-left: 3px solid var(--accent-card); }
   .rate-box.cash-rate { border-left: 3px solid var(--accent-cash); }
 
-  .rate-value { font-family: 'DM Mono', monospace; font-size: 1.1rem; font-weight: 500; color: var(--text); }
-  .rate-date { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.25rem; }
+  .rate-box label {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .rate-right { display: flex; flex-direction: column; }
+  .rate-value { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; color: var(--text); }
+  .rate-date { font-size: 0.58rem; color: var(--text-dim); margin-top: 0.1rem; opacity: 0.7; }
 
   /* Results */
   .results { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.4rem; }
@@ -339,7 +341,53 @@
     opacity: 0.5;
   }
 
-  footer { margin-top: 2.5rem; font-size: 0.7rem; color: var(--text-dim); text-align: center; opacity: 0.6; }
+  /* Sticky result bar */
+  .sticky-results {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #111e2b;
+    border-top: 1px solid var(--card-border);
+    padding: 0.7rem 1rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: stretch;
+    z-index: 100;
+  }
+
+  .sticky-result-item {
+    flex: 1;
+    border-radius: 10px;
+    padding: 0.5rem 0.7rem;
+    text-align: center;
+  }
+
+  .sticky-result-item.card-result {
+    background: rgba(231,76,60,0.1);
+    border: 1px solid rgba(231,76,60,0.3);
+  }
+
+  .sticky-result-item.cash-result {
+    background: rgba(46,204,113,0.1);
+    border: 1px solid rgba(46,204,113,0.3);
+  }
+
+  .sticky-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+  .card-result .sticky-label { color: var(--accent-card); }
+  .cash-result .sticky-label { color: var(--accent-cash); }
+
+  .sticky-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 600;
+    transition: transform 0.15s ease;
+  }
+
+  .sticky-value.pop { transform: scale(1.08); }
+
+  /* pad body bottom so content isn't hidden behind sticky bar */
+  body { padding-bottom: 6rem; }
 </style>
 </head>
 <body>
@@ -358,40 +406,24 @@
       <span class="currency-tag">₩ KRW</span>
       <input type="number" id="krwAmount" placeholder="例: 15000" inputmode="numeric">
     </div>
-    <div class="presets">
-      <button onclick="setAmount(1000)">₩1,000</button>
-      <button onclick="setAmount(5000)">₩5,000</button>
-      <button onclick="setAmount(10000)">₩10,000</button>
-      <button onclick="setAmount(50000)">₩50,000</button>
-      <button onclick="setAmount(100000)">₩100,000</button>
-    </div>
+
   </div>
 
   <!-- 匯率顯示（鎖定） -->
   <div class="rate-grid">
     <div class="rate-box card-rate">
-      <label>💳 刷卡匯率</label>
-      <div class="rate-value">0.02070</div>
-      <div class="rate-date">國際匯率 · 2026/05/23</div>
+      <label>💳 刷卡</label>
+      <div class="rate-right">
+        <div class="rate-value">0.02070</div>
+        <div class="rate-date">國際匯率 · 05/23</div>
+      </div>
     </div>
     <div class="rate-box cash-rate">
-      <label>💵 現金匯率</label>
-      <div class="rate-value">0.0231</div>
-      <div class="rate-date">固定匯率</div>
-    </div>
-  </div>
-
-  <!-- 結果 -->
-  <div class="results">
-    <div class="result-card card-result">
-      <div class="result-label">💳 刷卡價</div>
-      <div class="result-value" id="cardResult">—</div>
-      <div class="result-unit">新台幣 TWD</div>
-    </div>
-    <div class="result-card cash-result">
-      <div class="result-label">💵 現金價</div>
-      <div class="result-value" id="cashResult">—</div>
-      <div class="result-unit">新台幣 TWD</div>
+      <label>💵 現金</label>
+      <div class="rate-right">
+        <div class="rate-value">0.02310</div>
+        <div class="rate-date">固定匯率</div>
+      </div>
     </div>
   </div>
 
@@ -433,6 +465,18 @@
 </div>
 
 <footer>KRW → TWD 換算工具 · 匯率僅供參考</footer>
+
+<!-- 固定底部結果列 -->
+<div class="sticky-results">
+  <div class="sticky-result-item card-result">
+    <div class="sticky-label">💳 刷卡價</div>
+    <div class="sticky-value" id="cardResult">—</div>
+  </div>
+  <div class="sticky-result-item cash-result">
+    <div class="sticky-label">💵 現金價</div>
+    <div class="sticky-value" id="cashResult">—</div>
+  </div>
+</div>
 
 <script>
 const krwInput = document.getElementById('krwAmount');
@@ -479,8 +523,8 @@ function calculate() {
   currentCard = krw * CARD_RATE;
   currentCash = krw * CASH_RATE;
 
-  cardResultEl.textContent = krw ? `NT$ ${fmt(currentCard)}` : '—';
-  cashResultEl.textContent = krw ? `NT$ ${fmt(currentCash)}` : '—';
+  cardResultEl.textContent = krw ? `NT$${fmt(currentCard)}` : '—';
+  cashResultEl.textContent = krw ? `NT$${fmt(currentCash)}` : '—';
 
   if (krw) {
     const diff = Math.abs(currentCard - currentCash);
