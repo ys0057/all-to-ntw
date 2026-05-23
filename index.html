@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韓幣 → 台幣 換算器</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1923;
+    --card: #1a2a3a;
+    --card-border: #2a3f55;
+    --accent-card: #e74c3c;
+    --accent-cash: #2ecc71;
+    --text: #e8edf2;
+    --text-dim: #7f95a8;
+    --input-bg: #0d1520;
+    --input-border: #2a3f55;
+    --input-focus: #3498db;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  header h1 span.flag { font-size: 1.4rem; }
+
+  header p {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  /* Input sections */
+  .input-group {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .input-row .currency-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 0.6rem 0.7rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  input[type="number"], input[type="text"] {
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.15rem;
+    color: var(--text);
+    background: var(--input-bg);
+    border: 1.5px solid var(--input-border);
+    border-radius: 10px;
+    padding: 0.65rem 0.8rem;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  input:focus { border-color: var(--input-focus); }
+
+  /* Rate info display */
+  .rate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .rate-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .rate-box label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .rate-box.card-rate { border-left: 3px solid var(--accent-card); }
+  .rate-box.cash-rate { border-left: 3px solid var(--accent-cash); }
+
+  .rate-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .rate-date {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  /* Results */
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-top: 0.4rem;
+  }
+
+  .result-card {
+    border-radius: 14px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    opacity: 0.12;
+  }
+
+  .result-card.card-result {
+    background: rgba(231, 76, 60, 0.08);
+    border: 1px solid rgba(231, 76, 60, 0.25);
+  }
+
+  .result-card.cash-result {
+    background: rgba(46, 204, 113, 0.08);
+    border: 1px solid rgba(46, 204, 113, 0.25);
+  }
+
+  .result-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-result .result-label { color: var(--accent-card); }
+  .cash-result .result-label { color: var(--accent-cash); }
+
+  .result-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    transition: transform 0.15s ease;
+  }
+
+  .result-value.pop {
+    transform: scale(1.06);
+  }
+
+  .result-unit {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+
+  .diff-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+    min-height: 1.4em;
+  }
+
+  .diff-note span { color: var(--accent-cash); font-weight: 600; }
+
+  /* Preset buttons */
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.2rem;
+  }
+
+  .presets button {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .presets button:hover, .presets button:active {
+    background: var(--input-focus);
+    color: #fff;
+    border-color: var(--input-focus);
+  }
+
+  footer {
+    margin-top: 2.5rem;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-align: center;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="flag">🇰🇷</span> 韓幣 → 台幣 <span class="flag">🇹🇼</span></h1>
+  <p>即時換算刷卡 / 現金台幣價格</p>
+</header>
+
+<div class="container">
+
+  <!-- 金額輸入 -->
+  <div class="input-group">
+    <label>韓幣金額 (₩)</label>
+    <div class="input-row">
+      <span class="currency-tag">₩ KRW</span>
+      <input type="number" id="krwAmount" placeholder="例: 15000" inputmode="numeric">
+    </div>
+    <div class="presets" style="margin-top:0.7rem">
+      <button onclick="setAmount(1000)">₩1,000</button>
+      <button onclick="setAmount(5000)">₩5,000</button>
+      <button onclick="setAmount(10000)">₩10,000</button>
+      <button onclick="setAmount(50000)">₩50,000</button>
+      <button onclick="setAmount(100000)">₩100,000</button>
+    </div>
+  </div>
+
+  <!-- 匯率顯示（鎖定） -->
+  <div class="rate-grid">
+    <div class="rate-box card-rate">
+      <label>💳 刷卡匯率</label>
+      <div class="rate-value">0.02070</div>
+      <div class="rate-date">國際匯率 · 2026/05/23</div>
+    </div>
+    <div class="rate-box cash-rate">
+      <label>💵 現金匯率</label>
+      <div class="rate-value">0.0231</div>
+      <div class="rate-date">固定匯率</div>
+    </div>
+  </div>
+
+  <!-- 結果 -->
+  <div class="results">
+    <div class="result-card card-result">
+      <div class="result-label">💳 刷卡價</div>
+      <div class="result-value" id="cardResult">—</div>
+      <div class="result-unit">新台幣 TWD</div>
+    </div>
+    <div class="result-card cash-result">
+      <div class="result-label">💵 現金價</div>
+      <div class="result-value" id="cashResult">—</div>
+      <div class="result-unit">新台幣 TWD</div>
+    </div>
+  </div>
+
+  <div class="diff-note" id="diffNote"></div>
+
+</div>
+
+<footer>KRW → TWD 換算工具 · 匯率僅供參考</footer>
+
+<script>
+const krwInput = document.getElementById('krwAmount');
+const cardResult = document.getElementById('cardResult');
+const cashResult = document.getElementById('cashResult');
+const diffNote = document.getElementById('diffNote');
+
+const CARD_RATE = 0.02070;  // 國際匯率 2026/05/23（1 TWD = ₩48.3）
+const CASH_RATE = 0.0231;   // 固定現金匯率
+
+function setAmount(val) {
+  krwInput.value = val;
+  calculate();
+}
+
+function popAnim(el) {
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+  setTimeout(() => el.classList.remove('pop'), 180);
+}
+
+function formatTWD(num) {
+  if (isNaN(num) || num === 0) return '—';
+  return num.toLocaleString('zh-TW', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+}
+
+function calculate() {
+  const krw = parseFloat(krwInput.value) || 0;
+
+  const cardTWD = krw * CARD_RATE;
+  const cashTWD = krw * CASH_RATE;
+
+  cardResult.textContent = krw ? `NT$ ${formatTWD(cardTWD)}` : '—';
+  cashResult.textContent = krw ? `NT$ ${formatTWD(cashTWD)}` : '—';
+
+  if (krw) {
+    const diff = Math.abs(cardTWD - cashTWD);
+    const cheaper = cardTWD < cashTWD ? '刷卡' : cardTWD > cashTWD ? '現金' : null;
+    diffNote.innerHTML = cheaper
+      ? `${cheaper}較便宜，省 <span>NT$ ${formatTWD(diff)}</span>`
+      : '兩者價格相同';
+  } else {
+    diffNote.innerHTML = '';
+  }
+
+  popAnim(cardResult);
+  popAnim(cashResult);
+}
+
+krwInput.addEventListener('input', calculate);
+</script>
+
+</body>
+</html>
