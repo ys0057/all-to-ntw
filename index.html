@@ -37,51 +37,57 @@
   header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.25rem; }
   #updateTime { font-size: 0.72rem; color: var(--text-dim); }
 
-  .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 0.9rem; }
+  .container { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 0.9rem; }
 
-  /* ── Currency Tabs ── */
-  .currency-tabs {
-    display: flex;
-    gap: 0.35rem;
-    overflow-x: auto;
-    padding-bottom: 0.2rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  /* ── Currency Select ── */
+  .currency-select-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 0.8rem 1rem;
   }
-  .currency-tabs::-webkit-scrollbar { display: none; }
-
-  /* [FIX #4] div → button; 保留原視覺，補 font-family */
-  .currency-tab {
-    font-family: 'Noto Sans TC', sans-serif;
+  .currency-select-label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-bottom: 0.45rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .select-row {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.3rem;
-    padding: 0.5rem 0.65rem;
-    border-radius: 9px;
+  }
+  .currency-select {
+    font-family: 'Noto Sans TC', sans-serif;
+    width: 100%;
+    min-height: 2.8rem;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.65rem 2.4rem 0.65rem 0.8rem;
+    border-radius: 10px;
     border: 1px solid var(--card-border);
-    background: var(--card);
-    color: var(--text-dim);
-    font-size: 0.74rem;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: all 0.2s;
-    user-select: none;
+    outline: none;
+    transition: border-color 0.2s;
     -webkit-tap-highlight-color: transparent;
   }
-  .currency-tab:active { transform: scale(0.96); }
-  .currency-tab[aria-pressed="true"] {
-    background: var(--accent-blue);
+  .currency-select:focus {
     border-color: var(--accent-blue);
-    color: #fff;
   }
-  .currency-tab .tab-name {
-    font-size: 0.6rem;
-    font-weight: 400;
-    opacity: 0.75;
+  .select-arrow {
+    position: absolute;
+    right: 0.85rem;
+    color: var(--text-dim);
+    pointer-events: none;
+    font-size: 0.78rem;
   }
-  .currency-tab[aria-pressed="true"] .tab-name { opacity: 0.9; }
 
   /* ── Amount Input ── */
   .input-group {
@@ -448,6 +454,18 @@
     .history-del:hover { opacity: 1; color: var(--accent-card); }
   }
 
+  @media (max-width: 360px) {
+    body { padding-inline: 0.75rem; }
+    .rr-grid,
+    .summary-grid { grid-template-columns: 1fr; }
+    .action-row { flex-direction: column; }
+    .history-item { grid-template-columns: minmax(0, 1fr) auto; }
+    .history-twd {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+  }
+
   /* [FIX #7] prefers-reduced-motion：停用所有位移動畫 */
   @media (prefers-reduced-motion: reduce) {
     .rr-result, .summary-value { transition: none; }
@@ -464,7 +482,13 @@
 
 <div class="container">
 
-  <div class="currency-tabs" id="currencyTabs" role="toolbar" aria-label="選擇貨幣"></div>
+  <div class="currency-select-card">
+    <label class="currency-select-label" for="currencySelect">選擇國家 / 貨幣</label>
+    <div class="select-row">
+      <select class="currency-select" id="currencySelect" aria-label="選擇國家與貨幣"></select>
+      <span class="select-arrow" aria-hidden="true">▼</span>
+    </div>
+  </div>
 
   <div class="input-group">
     <label id="inputLabel" for="amount">韓幣金額 (₩)</label>
@@ -567,21 +591,39 @@
 
 <script>
 var CURRENCIES = {
-  KRW: { name: '韓幣',     symbol: '₩',  flag: '🇰🇷', defaultCash: 0.02310, placeholder: '15000' },
-  JPY: { name: '日幣',     symbol: '¥',  flag: '🇯🇵', defaultCash: 0.2200,  placeholder: '1000' },
-  USD: { name: '美金',     symbol: '$',  flag: '🇺🇸', defaultCash: 32.00,   placeholder: '100' },
-  THB: { name: '泰銖',     symbol: '฿',  flag: '🇹🇭', defaultCash: 0.92,    placeholder: '1000' },
-  VND: { name: '越南盾',   symbol: '₫',  flag: '🇻🇳', defaultCash: 0.00130, placeholder: '100000' },
-  EUR: { name: '歐元',     symbol: '€',  flag: '🇪🇺', defaultCash: 35.50,   placeholder: '100' },
-  CZK: { name: '捷克克朗', symbol: 'Kč', flag: '🇨🇿', defaultCash: 1.50,    placeholder: '1000' }
+  KRW: { country: '韓國',     name: '韓幣',       symbol: '₩',   flag: '🇰🇷', defaultCash: 0.02310, placeholder: '15000' },
+  JPY: { country: '日本',     name: '日幣',       symbol: '¥',   flag: '🇯🇵', defaultCash: 0.2200,  placeholder: '1000' },
+  USD: { country: '美國',     name: '美金',       symbol: '$',   flag: '🇺🇸', defaultCash: 32.00,   placeholder: '100' },
+  CNY: { country: '中國',     name: '人民幣',     symbol: '¥',   flag: '🇨🇳', defaultCash: 4.45,    placeholder: '100' },
+  HKD: { country: '香港',     name: '港幣',       symbol: 'HK$', flag: '🇭🇰', defaultCash: 4.10,    placeholder: '100' },
+  MOP: { country: '澳門',     name: '澳門幣',     symbol: 'MOP$',flag: '🇲🇴', defaultCash: 4.00,    placeholder: '100' },
+  SGD: { country: '新加坡',   name: '新幣',       symbol: 'S$',  flag: '🇸🇬', defaultCash: 24.00,   placeholder: '100' },
+  MYR: { country: '馬來西亞', name: '令吉',       symbol: 'RM',  flag: '🇲🇾', defaultCash: 7.00,    placeholder: '100' },
+  THB: { country: '泰國',     name: '泰銖',       symbol: '฿',   flag: '🇹🇭', defaultCash: 0.92,    placeholder: '1000' },
+  VND: { country: '越南',     name: '越南盾',     symbol: '₫',   flag: '🇻🇳', defaultCash: 0.00130, placeholder: '100000' },
+  PHP: { country: '菲律賓',   name: '披索',       symbol: '₱',   flag: '🇵🇭', defaultCash: 0.56,    placeholder: '1000' },
+  IDR: { country: '印尼',     name: '印尼盾',     symbol: 'Rp',  flag: '🇮🇩', defaultCash: 0.0020,  placeholder: '100000' },
+  EUR: { country: '歐元區',   name: '歐元',       symbol: '€',   flag: '🇪🇺', defaultCash: 35.50,   placeholder: '100' },
+  GBP: { country: '英國',     name: '英鎊',       symbol: '£',   flag: '🇬🇧', defaultCash: 41.00,   placeholder: '100' },
+  CHF: { country: '瑞士',     name: '瑞士法郎',   symbol: 'CHF', flag: '🇨🇭', defaultCash: 36.00,   placeholder: '100' },
+  CZK: { country: '捷克',     name: '捷克克朗',   symbol: 'Kč',  flag: '🇨🇿', defaultCash: 1.50,    placeholder: '1000' },
+  AUD: { country: '澳洲',     name: '澳幣',       symbol: 'A$',  flag: '🇦🇺', defaultCash: 21.00,   placeholder: '100' },
+  NZD: { country: '紐西蘭',   name: '紐幣',       symbol: 'NZ$', flag: '🇳🇿', defaultCash: 19.00,   placeholder: '100' },
+  CAD: { country: '加拿大',   name: '加幣',       symbol: 'C$',  flag: '🇨🇦', defaultCash: 23.50,   placeholder: '100' },
+  AED: { country: '阿聯酋',   name: '迪拉姆',     symbol: 'د.إ', flag: '🇦🇪', defaultCash: 8.70,    placeholder: '100' },
+  TRY: { country: '土耳其',   name: '土耳其里拉', symbol: '₺',   flag: '🇹🇷', defaultCash: 1.00,    placeholder: '1000' }
 };
 
-var FALLBACK_API = { KRW: 47.77, JPY: 5.07, USD: 0.0318, THB: 1.08, VND: 819.67, EUR: 0.0294, CZK: 0.73 };
+var FALLBACK_API = {
+  KRW: 47.77, JPY: 5.07, USD: 0.0318, CNY: 0.225, HKD: 0.244, MOP: 0.25, SGD: 0.0417,
+  MYR: 0.143, THB: 1.08, VND: 819.67, PHP: 1.79, IDR: 500, EUR: 0.0294, GBP: 0.0244,
+  CHF: 0.0278, CZK: 0.73, AUD: 0.0476, NZD: 0.0526, CAD: 0.0426, AED: 0.115, TRY: 1.00
+};
 
 function $(id) { return document.getElementById(id); }
 
 var updateTimeEl        = $('updateTime');
-var currencyTabsEl      = $('currencyTabs');
+var currencySelectEl    = $('currencySelect');
 var inputLabelEl        = $('inputLabel');
 var currencyTagEl       = $('currencyTag');
 var amountInput         = $('amount');
@@ -614,11 +656,13 @@ try {
   cashModes       = JSON.parse(localStorage.getItem('cashModes') || '{}');
   cardFee         = parseFloat(localStorage.getItem('cardFee'));
   if (isNaN(cardFee)) cardFee = 1.5;
+  cardFee = clamp(cardFee, 0, 10);
 
   // [FIX #3] 歷史紀錄與加總持久化
   historyLog = JSON.parse(localStorage.getItem('historyLog') || '[]');
-  totalCard  = parseFloat(localStorage.getItem('totalCard')) || 0;
-  totalCash  = parseFloat(localStorage.getItem('totalCash')) || 0;
+  historyLog = sanitizeHistory(historyLog);
+  totalCard  = sumHistory(historyLog, 'card');
+  totalCash  = sumHistory(historyLog, 'cash');
 } catch (e) {
   activeCurrency = 'KRW';
   manualCashRates = {}; manualCardRates = {};
@@ -634,9 +678,53 @@ function save(k, v) {
 }
 
 function saveHistory() {
+  historyLog = sanitizeHistory(historyLog);
+  totalCard = sumHistory(historyLog, 'card');
+  totalCash = sumHistory(historyLog, 'cash');
   save('historyLog', historyLog);
   save('totalCard', String(totalCard));
   save('totalCash', String(totalCash));
+}
+
+function clamp(n, min, max) {
+  if (!isFinite(n)) return min;
+  return Math.min(max, Math.max(min, n));
+}
+
+function safeNumber(n) {
+  n = parseFloat(n);
+  return isFinite(n) && n > 0 ? n : 0;
+}
+
+function safeText(s) {
+  return typeof s === 'string' ? s : '';
+}
+
+function sanitizeHistory(items) {
+  if (!Array.isArray(items)) return [];
+  return items.map(function(item) {
+    item = item && typeof item === 'object' ? item : {};
+    var code = CURRENCIES[item.code] ? item.code : 'KRW';
+    var c = CURRENCIES[code];
+    return {
+      code: code,
+      flag: c.flag,
+      symbol: c.symbol,
+      amount: safeNumber(item.amount),
+      card: safeNumber(item.card),
+      cash: safeNumber(item.cash),
+      time: safeText(item.time).slice(0, 5),
+      note: safeText(item.note).slice(0, 20)
+    };
+  }).filter(function(item) {
+    return item.amount > 0 && item.card > 0 && item.cash > 0;
+  });
+}
+
+function sumHistory(items, key) {
+  return sanitizeHistory(items).reduce(function(sum, item) {
+    return sum + safeNumber(item[key]);
+  }, 0);
 }
 
 function fmt(n) {
@@ -721,23 +809,18 @@ function fetchRates() {
     });
 }
 
-// ── [FIX #4] tabs 改用 <button>，加 aria-pressed ──
-function renderTabs() {
-  currencyTabsEl.innerHTML = '';
+function renderCurrencyOptions() {
+  currencySelectEl.innerHTML = '';
   var codes = Object.keys(CURRENCIES);
   for (var i = 0; i < codes.length; i++) {
     var code = codes[i];
     var c = CURRENCIES[code];
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'currency-tab' + (code === activeCurrency ? ' active' : '');
-    btn.setAttribute('aria-pressed', code === activeCurrency ? 'true' : 'false');
-    btn.setAttribute('aria-label', c.name);
-    btn.dataset.code = code;
-    btn.innerHTML = c.flag + ' ' + code + ' <span class="tab-name">' + c.name + '</span>';
-    btn.addEventListener('click', (function(cd) { return function() { switchCurrency(cd); }; })(code));
-    currencyTabsEl.appendChild(btn);
+    var option = document.createElement('option');
+    option.value = code;
+    option.textContent = c.flag + ' ' + c.country + ' / ' + c.name + ' (' + code + ')';
+    currencySelectEl.appendChild(option);
   }
+  currencySelectEl.value = activeCurrency;
 }
 
 function switchCurrency(code) {
@@ -751,12 +834,12 @@ function switchCurrency(code) {
   cashResultEl.textContent = '—';
   diffNoteEl.innerHTML = '';
   refreshCurrencyUI();
-  renderTabs();
+  currencySelectEl.value = activeCurrency;
 }
 
 function refreshCurrencyUI() {
   var c = CURRENCIES[activeCurrency];
-  inputLabelEl.textContent = c.name + '金額 (' + c.symbol + ')';
+  inputLabelEl.textContent = c.country + ' ' + c.name + '金額 (' + c.symbol + ')';
   currencyTagEl.textContent = c.symbol + ' ' + activeCurrency;
   amountInput.placeholder = '例: ' + c.placeholder;
   refreshModeUI();
@@ -914,14 +997,14 @@ function renderHistory() {
     html +=
       '<div class="history-item">' +
         '<div class="history-left">' +
-          '<span class="history-from">' + h.flag + ' ' + h.symbol + fmt(h.amount) + '</span>' +
+          '<span class="history-from">' + escHtml(h.flag) + ' ' + escHtml(h.symbol) + fmt(h.amount) + '</span>' +
           noteHtml +
         '</div>' +
         '<div class="history-twd">' +
           '<span class="history-card-val">💳 ' + fmt(h.card) + '</span>' +
           '<span class="history-cash-val">💵 ' + fmt(h.cash) + '</span>' +
         '</div>' +
-        '<span class="history-time">' + h.time + '</span>' +
+        '<span class="history-time">' + escHtml(h.time) + '</span>' +
         '<button class="history-del" type="button" data-idx="' + i + '" aria-label="刪除此筆">✕</button>' +
       '</div>';
   }
@@ -958,6 +1041,10 @@ function resetStats() {
 }
 
 // ── Event listeners ──
+currencySelectEl.addEventListener('change', function() {
+  switchCurrency(currencySelectEl.value);
+});
+
 amountInput.addEventListener('input', function() { calculate(false); });
 
 cardManualInput.addEventListener('input', function() {
@@ -980,9 +1067,12 @@ cashManualInput.addEventListener('input', function() {
 
 cardFeeInput.addEventListener('input', function() {
   var v = parseFloat(cardFeeInput.value);
-  cardFee = isNaN(v) ? 0 : v;
+  cardFee = clamp(isNaN(v) ? 0 : v, 0, 10);
+  if (!isNaN(v) && v !== cardFee) cardFeeInput.value = cardFee;
   save('cardFee', String(cardFee));
-  refreshRateDisplay();
+  if (getCardMode(activeCurrency) === 'auto') {
+    cardRateDisplay.textContent = '× ' + fmtRate(autoCardRate(activeCurrency));
+  }
   calculate(false);
 });
 
@@ -999,7 +1089,7 @@ $('btnReset').addEventListener('click', resetStats);
 $('btnClearHistory').addEventListener('click', clearHistory);
 
 // ── Init ──
-renderTabs();
+renderCurrencyOptions();
 refreshCurrencyUI();
 updateSummary();
 renderHistory();
